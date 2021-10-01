@@ -1,0 +1,29 @@
+language: node_js
+node_js:
+  - 13
+
+services:
+  - docker
+
+# Pre-testing installs
+install:
+  - echo "nothing needs to be installed"
+
+# Scripts to be run such as tests
+before_script:
+  - echo "no tests"
+
+script:
+  - docker --version # print the version for logging
+  - docker-compose -f docker-compose-build.yaml build --parallel
+  - docker tag reverseproxy amine24h/reverseproxy:latest
+  - docker tag udagram-api-user amine24h/udagram-api-user:latest
+  - docker tag udagram-api-feed amine24h/udagram-api-feed:latest
+  - docker tag udagram-frontend:local amine24h/udagram-frontend:local
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push amine24h/reverseproxy
+  - docker push amine24h/udagram-api-user
+  - docker push amine24h/udagram-api-feed
+  - docker push amine24h/udagram-frontend
