@@ -17,5 +17,12 @@ spec:
       containers:
       - name: reverseproxy
         image: amine24h/reverseproxy
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "250m"
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
         ports:
         - containerPort: 8080
